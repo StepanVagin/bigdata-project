@@ -1,0 +1,46 @@
+/home/team29/bigdata-final-project/venv/lib64/python3.6/site-packages/pyspark/python/lib/pyspark.zip/pyspark/context.py:238: FutureWarning: Python 3.6 support is deprecated in Spark 3.2.
+  FutureWarning
+    0%|                                                  | 0/9 [00:00]root
+ |-- event_id: long (nullable = true)
+ |-- event_type: string (nullable = true)
+ |-- damage_property: double (nullable = true)
+ |-- damage_crops: double (nullable = true)
+ |-- deaths_direct: integer (nullable = true)
+ |-- deaths_indirect: integer (nullable = true)
+ |-- injuries_direct: integer (nullable = true)
+ |-- injuries_indirect: integer (nullable = true)
+ |-- begin_date: timestamp (nullable = true)
+ |-- end_date: timestamp (nullable = true)
+ |-- s: double (nullable = true)
+ |-- severity: integer (nullable = true)
+ |-- state: string (nullable = true)
+
+  reading hive table          :   0%|                    | 0/9 [00:02]  reading hive table          :  11%|██▏                 | 1/9 [00:02]  feature engineering         :  11%|██▏                 | 1/9 [00:03]  feature engineering         :  22%|████▍               | 2/9 [00:03]+--------------------+-----+
+|            features|label|
++--------------------+-----+
+|(128,[0,80,123,12...|  0.0|
+|(128,[4,80,123,12...|  0.0|
+|(128,[4,80,123,12...|  0.0|
+|(128,[4,80,123,12...|  0.0|
+|(128,[4,80,123,12...|  0.0|
++--------------------+-----+
+only showing top 5 rows
+
+  preprocessing pipeline      :  22%|████▍               | 2/9 [00:36]  preprocessing pipeline      :  33%|██████▋             | 3/9 [00:36]  train/test split            :  33%|██████▋             | 3/9 [00:58]  train/test split            :  44%|████████▉           | 4/9 [00:58]Traceback (most recent call last):
+  File "/usr/lib64/python3.6/multiprocessing/pool.py", line 720, in next
+    item = self._items.popleft()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/team29/bigdata-final-project/scripts/model.py", line 140, in <module>
+    cv_model_rf = cv_rf.fit(train_data)
+  File "/home/team29/bigdata-final-project/venv/lib64/python3.6/site-packages/pyspark/python/lib/pyspark.zip/pyspark/ml/base.py", line 161, in fit
+  File "/home/team29/bigdata-final-project/venv/lib64/python3.6/site-packages/pyspark/python/lib/pyspark.zip/pyspark/ml/tuning.py", line 689, in _fit
+  File "/usr/lib64/python3.6/multiprocessing/pool.py", line 724, in next
+    self._cond.wait(timeout)
+  File "/usr/lib64/python3.6/threading.py", line 295, in wait
+    waiter.acquire()
+  File "/home/team29/bigdata-final-project/venv/lib64/python3.6/site-packages/pyspark/python/lib/pyspark.zip/pyspark/context.py", line 293, in signal_handler
+KeyboardInterrupt

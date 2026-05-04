@@ -1,0 +1,1 @@
+COPY storm_events_raw FROM STDIN WITH CSV HEADER;

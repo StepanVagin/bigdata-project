@@ -2,7 +2,7 @@ pylint
 pyspark
 pandas
 streamlit
-psycopg2
+psycopg2-binary
 tqdm
 matplotlib
 seaborn

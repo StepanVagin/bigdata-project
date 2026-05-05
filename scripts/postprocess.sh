@@ -6,8 +6,7 @@ psql_pass=$(head -n 1 secrets/.psql.pass)
 PG="psql -h hadoop-04.uni.innopolis.ru -U team29 -d team29_projectdb"
 BEELINE="beeline -u jdbc:hive2://hadoop-03.uni.innopolis.ru:10001 -n team29 -p $hive_pass"
 
-# ── 1. External Hive tables for all stage III CSVs ──────────────────────────
-echo "==> Creating external Hive tables for stage III outputs..."
+echo "Creating external Hive tables for stage III outputs..."
 $BEELINE << 'EOF'
 USE team29_projectdb;
 
@@ -69,8 +68,7 @@ UNION ALL SELECT 'feature_importance', COUNT(*) FROM feature_importance
 UNION ALL SELECT 'cv_metrics',         COUNT(*) FROM cv_metrics;
 EOF
 
-# ── 2. Load into PostgreSQL for Superset ────────────────────────────────────
-echo "==> Creating ML result tables in PostgreSQL..."
+echo "Creating ML result tables in PostgreSQL..."
 PGPASSWORD=$psql_pass $PG << 'EOF'
 DROP TABLE IF EXISTS model1_predictions;
 CREATE TABLE model1_predictions (
@@ -104,21 +102,3 @@ CREATE TABLE cv_metrics (
 );
 EOF
 
-echo "==> Loading data into PostgreSQL..."
-PGPASSWORD=$psql_pass $PG -c "\COPY model1_predictions FROM 'output/model1_predictions.csv' CSV HEADER;"
-PGPASSWORD=$psql_pass $PG -c "\COPY model2_predictions FROM 'output/model2_predictions.csv' CSV HEADER;"
-PGPASSWORD=$psql_pass $PG -c "\COPY ml_evaluation      FROM 'output/evaluation.csv'         CSV HEADER;"
-PGPASSWORD=$psql_pass $PG -c "\COPY feature_importance FROM 'output/feature_importance.csv' CSV HEADER;"
-PGPASSWORD=$psql_pass $PG -c "\COPY cv_metrics         FROM 'output/cv_metrics.csv'         CSV HEADER;"
-
-echo "==> Verifying row counts..."
-PGPASSWORD=$psql_pass $PG << 'EOF'
-SELECT 'model1_predictions' AS table_name, COUNT(*) AS rows FROM model1_predictions
-UNION ALL SELECT 'model2_predictions', COUNT(*) FROM model2_predictions
-UNION ALL SELECT 'ml_evaluation',      COUNT(*) FROM ml_evaluation
-UNION ALL SELECT 'feature_importance', COUNT(*) FROM feature_importance
-UNION ALL SELECT 'cv_metrics',         COUNT(*) FROM cv_metrics
-ORDER BY table_name;
-EOF
-
-echo "==> Done. All stage III results in Hive and PostgreSQL."
